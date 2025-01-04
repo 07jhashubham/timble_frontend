@@ -1,11 +1,15 @@
 # Build environment
 FROM rustlang/rust:nightly-bullseye as builder
 
-# Install cargo-leptos
+# Install cargo-binstall, which makes it easier to install other
+# cargo extensions like cargo-leptos
 RUN wget https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz \
     && tar -xvf cargo-binstall-x86_64-unknown-linux-musl.tgz \
     && cp cargo-binstall /usr/local/cargo/bin \
     && cargo binstall cargo-leptos -y
+
+# Install the specific version of wasm-bindgen-cli
+RUN cargo install -f wasm-bindgen-cli --version 0.2.95
 
 # Add the WASM target
 RUN rustup target add wasm32-unknown-unknown
