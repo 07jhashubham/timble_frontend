@@ -19,8 +19,13 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY . .
 
+# Lock the `wasm-bindgen` dependency to 0.2.95 in Cargo.toml
+RUN sed -i 's/wasm-bindgen = ".*"/wasm-bindgen = "=0.2.95"/' Cargo.toml
+
 # Build the app
 RUN cargo leptos build --release -vv
+
+
 
 # Runtime environment
 FROM debian:bookworm-slim as runtime
